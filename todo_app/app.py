@@ -5,7 +5,7 @@ from todo_app.data.session_items import *
 app = Flask(__name__)
 app.config.from_object(Config)
 
-# I added the add functionality to the route rather than a seperate page as this seemed more efficient
+# I added add functionality to the route rather than a seperate page as this seemed more efficient
 @app.route('/', methods=['POST', 'GET'])
 def index():
 	if request.method == 'POST': 
