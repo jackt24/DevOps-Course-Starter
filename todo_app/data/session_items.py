@@ -1,10 +1,10 @@
 from flask import session
+import requests
 
-_DEFAULT_ITEMS = [
-    { 'id': 1, 'status': 'Not Started', 'title': 'List saved todo items' },
-    { 'id': 2, 'status': 'Not Started', 'title': 'Allow new items to be added' }
-]
-
+SECRET_KEY = '67c80a86e3b5e5128344a646e1805ea5'
+TOKEN = '8f4ea03ffc2cda30041aa7c6b87cd5ddf05f76409cf37967ad304e07d01485c5'
+BOARD = '60ace9c7e035d1378036b868'
+LIST = '60acf2c006fcce49c3cdc33a'
 
 def get_items():
     """
@@ -13,8 +13,20 @@ def get_items():
     Returns:
         list: The list of saved items.
     """
-    return session.get('items', _DEFAULT_ITEMS.copy())
-
+    url = "https://api.trello.com/1/lists/" + LIST + "/cards"
+    query = {
+		'key': SECRET_KEY,
+    	'token': TOKEN,
+    	}
+	
+    response = requests.request('GET', url, params=query)
+    x=response.json()
+    
+    items = [ ]
+    for i in x:
+        items.append({'id': i['id'], 'status': 'Not Started', 'title': i['name'] })
+	
+    return items
 
 def get_item(id):
     """
@@ -40,18 +52,35 @@ def add_item(title):
     Returns:
         item: The saved item.
     """
-    items = get_items()
+    # items = get_items()
 
-    # Determine the ID for the item based on that of the previously added item
-    id = items[-1]['id'] + 1 if items else 0
+    url = "https://api.trello.com/1/cards"
 
-    item = { 'id': id, 'title': title, 'status': 'Not Started' }
+    query = {
+        'key': SECRET_KEY,
+        'token': TOKEN,
+        'idList': LIST,
+        'name': title
+    }
 
-    # Add the item to the list
-    items.append(item)
-    session['items'] = items
+    response = requests.request(
+        'POST',
+        url,
+        params=query
+    )
 
-    return item
+    print(response.text)
+
+    # # Determine the ID for the item based on that of the previously added item
+    # id = items[-1]['id'] + 1 if items else 0
+
+    # item = { 'id': id, 'title': title, 'status': 'Not Started' }
+
+    # # Add the item to the list
+    # items.append(item)
+    # session['items'] = items
+
+    # return item
 
 
 def save_item(item):
@@ -67,3 +96,6 @@ def save_item(item):
     session['items'] = updated_items
 
     return item
+
+def complete_item(id):
+    

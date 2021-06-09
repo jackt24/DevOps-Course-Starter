@@ -5,8 +5,27 @@ from todo_app.data.session_items import *
 app = Flask(__name__)
 app.config.from_object(Config)
 
+# Gets all lists from the board
+# @app.route('/trello')
+# def displayItems():
+# 	url = "https://api.trello.com/1/lists/" + LIST + "/cards"
+# 	query = {
+# 		'key': SECRET_KEY,
+#     	'token': TOKEN,
+#     	}
+	
+# 	print("")
+# 	response = requests.request('GET', url, params=query)
+# 	x=response.json()
+    
+# 	items = [ ]
+# 	for i in x:
+# 		items.append({'id': i['id'], 'status': 'Not Started', 'title': i['name'] })
+	
+# 	return items
+
 # I added add functionality to the route rather than a seperate page as this seemed more efficient
-@app.route('/', methods=['POST', 'GET'])
+@app.route('/',methods=['POST', 'GET'])
 def index():
 	if request.method == 'POST': 
 		newItemTitle = request.form['text']
@@ -25,4 +44,4 @@ def complete(id):
 	return(id + ' marked as complete')
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
