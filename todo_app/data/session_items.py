@@ -1,4 +1,6 @@
+from ast import Index
 from flask import session
+from flask.helpers import url_for
 import requests
 
 SECRET_KEY = '67c80a86e3b5e5128344a646e1805ea5'
@@ -94,8 +96,8 @@ def save_item(item):
     updated_items = [item if item['id'] == existing_item['id'] else existing_item for existing_item in existing_items]
 
     session['items'] = updated_items
-
+    
     return item
 
 def complete_item(id):
-    
+    return url_for(Index)
