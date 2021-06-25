@@ -1,13 +1,15 @@
-from ast import Index
 from flask import session
+import requests, os
+from dotenv import load_dotenv
 from flask.helpers import url_for
-import requests
 
-SECRET_KEY = '67c80a86e3b5e5128344a646e1805ea5'
-TOKEN = '8f4ea03ffc2cda30041aa7c6b87cd5ddf05f76409cf37967ad304e07d01485c5'
-BOARD = '60ace9c7e035d1378036b868'
-LIST = '60acf2c006fcce49c3cdc33a'
-COMPLETELIST = '60d606a40b8ef2847cdc35f9'
+load_dotenv()
+
+SECRET_KEY = os.getenv('SECRET_KEY')
+TOKEN = os.getenv('TOKEN')
+BOARD = os.getenv('BOARD')
+LIST = os.getenv('LIST')
+COMPLETELIST = os.getenv('COMPLETELIST')
 
 def get_items():
     """
