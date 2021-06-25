@@ -11,8 +11,13 @@
     <div class="col-md-12"> 
       <h2>Items</h2>
       <ul class="list-group mb-4">
-        {% for items in items %}
-          <li>{{items.id}} - {{items.status}} - {{items.title}} - <form method="POST" name="updateform"></form><input type="submit" name = "Mark Complete" value="Mark Complete"></form></li>
+        {% for item in items %}
+          <form method="PUT" name="updateform" action="/complete/{{item.id}}">
+            <li>
+                {{item.id}} - {{item.status}} - {{item.title}} 
+                <input type="submit" method="PUT"  action="/complete/{{item.id}}" name="Mark Complete" value="Mark Complete">
+            </li>
+          </form>
         {% endfor %}
       </ul>
       <h2>Add Item</h2>

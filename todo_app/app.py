@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect
 from todo_app.flask_config import Config
 from todo_app.data.session_items import *
 
@@ -36,12 +36,19 @@ def index():
 		items = get_items()
 		return render_template("index.html", items=items)
 
-@app.route('/complete/<id>', methods=['POST', 'GET'])
+@app.route('/complete/<id>')
 def complete(id):
-	completeItem = get_item(id)
-	completeItem['status'] = 'Complete'
-	save_item(completeItem)
-	return(id + ' marked as complete')
+	complete_item(id)
+	return redirect(url_for('index'))
+	# if request.method == 'PUT':
+	# 	complete_item(id)
+	# 	return redirect(url_for('index'))
+	# else:
+	# 	return redirect(url_for('index'))
+
+# @app.route('/lol', methods=['POST', 'GET'])
+# def lol():
+# 	return print("hello world")
 
 if __name__ == '__main__':
     app.run(debug=True)

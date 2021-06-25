@@ -26,7 +26,7 @@ def get_items():
     
     items = [ ]
     for i in x:
-        items.append({'id': i['id'], 'status': 'Not Started', 'title': i['name'] })
+        items.append({'id': i['id'], 'status': i['closed'], 'title': i['name'] })
 	
     return items
 
@@ -99,5 +99,20 @@ def save_item(item):
     
     return item
 
+# Maybe we have to move this to anotehr list - update the list rather than closed. Currently removes from list - Closed deletes
 def complete_item(id):
-    return url_for(Index)
+    url = "https://api.trello.com/1/cards/" + id 
+
+    query = {
+        'key': SECRET_KEY,
+        'token': TOKEN,
+        'closed': 'true'
+    }
+
+    headers = {
+        "Accept": "application/json"
+    }
+
+    response = requests.request('PUT', url, headers=headers, params=query)
+
+    print(response.text)
