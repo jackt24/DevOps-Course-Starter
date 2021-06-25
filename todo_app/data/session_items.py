@@ -7,13 +7,14 @@ SECRET_KEY = '67c80a86e3b5e5128344a646e1805ea5'
 TOKEN = '8f4ea03ffc2cda30041aa7c6b87cd5ddf05f76409cf37967ad304e07d01485c5'
 BOARD = '60ace9c7e035d1378036b868'
 LIST = '60acf2c006fcce49c3cdc33a'
+COMPLETELIST = '60d606a40b8ef2847cdc35f9'
 
 def get_items():
     """
-    Fetches all saved items from the session.
+    Fetches all todo items from the session.
 
     Returns:
-        list: The list of saved items.
+        list: The list of todo saved items.
     """
     url = "https://api.trello.com/1/lists/" + LIST + "/cards"
     query = {
@@ -26,9 +27,32 @@ def get_items():
     
     items = [ ]
     for i in x:
-        items.append({'id': i['id'], 'status': i['closed'], 'title': i['name'] })
+        items.append({'id': i['id'], 'status': 'ToDo', 'title': i['name'] })
 	
     return items
+
+def get_completeitems():
+    """
+    Fetches all complete items from the session.
+
+    Returns:
+        list: The list of completed saved items.
+    """
+    url = "https://api.trello.com/1/lists/" + COMPLETELIST + "/cards"
+    query = {
+		'key': SECRET_KEY,
+    	'token': TOKEN,
+    	}
+	
+    response = requests.request('GET', url, params=query)
+    x=response.json()
+    
+    completeItems = [ ]
+    for i in x:
+        completeItems.append({'id': i['id'], 'status': 'Complete', 'title': i['name'] })
+	
+    return completeItems
+
 
 def get_item(id):
     """
@@ -101,6 +125,23 @@ def save_item(item):
 
 # Maybe we have to move this to anotehr list - update the list rather than closed. Currently removes from list - Closed deletes
 def complete_item(id):
+    url = "https://api.trello.com/1/cards/" + id 
+
+    query = {
+        'key': SECRET_KEY,
+        'token': TOKEN,
+        'idList': COMPLETELIST
+    }
+
+    headers = {
+        "Accept": "application/json"
+    }
+
+    response = requests.request('PUT', url, headers=headers, params=query)
+
+    print(response.text)
+
+def delete_item(id):
     url = "https://api.trello.com/1/cards/" + id 
 
     query = {

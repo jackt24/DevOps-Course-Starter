@@ -31,10 +31,12 @@ def index():
 		newItemTitle = request.form['text']
 		add_item(newItemTitle)
 		items = get_items()
-		return render_template("index.html", items=items)
+		complete_items = get_completeitems()
+		return render_template("index.html", items=items, complete_items=complete_items)
 	else:
 		items = get_items()
-		return render_template("index.html", items=items)
+		complete_items = get_completeitems()
+		return render_template("index.html", items=items, complete_items=complete_items)
 
 @app.route('/complete/<id>')
 def complete(id):

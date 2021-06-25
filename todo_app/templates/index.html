@@ -9,7 +9,7 @@
 
   <div class="row" padding-bottom: 500px;> 
     <div class="col-md-12"> 
-      <h2>Items</h2>
+      <h2>ToDo Items</h2>
       <ul class="list-group mb-4">
         {% for item in items %}
           <form method="PUT" name="updateform" action="/complete/{{item.id}}">
@@ -20,6 +20,16 @@
           </form>
         {% endfor %}
       </ul>
+
+      <h2>Complete Items</h2>
+      <ul class="list-group mb-4">
+        {% for complete_item in complete_items %}
+            <li>
+                {{complete_item.id}} - {{complete_item.status}} - {{complete_item.title}} 
+            </li>
+        {% endfor %}
+      </ul>
+
       <h2>Add Item</h2>
         <form method="POST" name="form">
             <input type="text" name='text' id='text'>
