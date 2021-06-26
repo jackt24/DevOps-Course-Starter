@@ -6,19 +6,19 @@ from todo_app import item
 app = Flask(__name__)
 app.config.from_object(Config)
 
-# Populate Lists and add items 
+# Populate lists and add items 
 @app.route('/',methods=['POST', 'GET'])
 def index():
-	if request.method == 'POST': 
-		newItemTitle = request.form['text']
-		add_item(newItemTitle)
-		items = get_items()
-		complete_items = get_completeitems()
-		return render_template("index.html", items=items, complete_items=complete_items)
-	else:
-		items = get_items()
-		complete_items = get_completeitems()
-		return render_template("index.html", items=items, complete_items=complete_items)
+	items = get_items()
+	complete_items = get_completeitems()
+	return render_template("index.html", items=items, complete_items=complete_items)
+
+# Add an item to the to do list
+@app.route('/add', methods=['POST', 'GET'])
+def add():
+	newItemTitle = request.form['text']
+	add_item(newItemTitle)
+	return redirect(url_for('index'))
 
 # Move an item from the todo list to the complete list
 @app.route('/complete/<id>')

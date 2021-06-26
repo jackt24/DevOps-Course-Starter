@@ -11,13 +11,8 @@ BOARD = os.getenv('BOARD')
 LIST = os.getenv('LIST')
 COMPLETELIST = os.getenv('COMPLETELIST')
 
+# Returns a list of todo items
 def get_items():
-    """
-    Fetches all todo items from the session.
-
-    Returns:
-        list: The list of todo saved items.
-    """
     url = "https://api.trello.com/1/lists/" + LIST + "/cards"
     query = {
 		'key': SECRET_KEY,
@@ -33,13 +28,8 @@ def get_items():
 	
     return items
 
+# Returns a list of completed items
 def get_completeitems():
-    """
-    Fetches all complete items from the session.
-
-    Returns:
-        list: The list of completed saved items.
-    """
     url = "https://api.trello.com/1/lists/" + COMPLETELIST + "/cards"
     query = {
 		'key': SECRET_KEY,
@@ -55,32 +45,13 @@ def get_completeitems():
 	
     return completeItems
 
-
+# Gets an item from the list based on ID
 def get_item(id):
-    """
-    Fetches the saved item with the specified ID.
-
-    Args:
-        id: The ID of the item.
-
-    Returns:
-        item: The saved item, or None if no items match the specified ID.
-    """
     items = get_items()
     return next((item for item in items if item['id'] == int(id)), None)
 
-
+# Adds a new item to the todo list with a specified title
 def add_item(title):
-    """
-    Adds a new item with the specified title to the session.
-
-    Args:
-        title: The title of the item.
-
-    Returns:
-        item: The saved item.
-    """
-    # items = get_items()
 
     url = "https://api.trello.com/1/cards"
 
@@ -99,18 +70,7 @@ def add_item(title):
 
     print(response.text)
 
-    # # Determine the ID for the item based on that of the previously added item
-    # id = items[-1]['id'] + 1 if items else 0
-
-    # item = { 'id': id, 'title': title, 'status': 'Not Started' }
-
-    # # Add the item to the list
-    # items.append(item)
-    # session['items'] = items
-
-    # return item
-
-
+# Redundant?
 def save_item(item):
     """
     Updates an existing item in the session. If no existing item matches the ID of the specified item, nothing is saved.
@@ -125,7 +85,7 @@ def save_item(item):
     
     return item
 
-# Maybe we have to move this to anotehr list - update the list rather than closed. Currently removes from list - Closed deletes
+# Move an item from the todo to the complete list
 def complete_item(id):
     url = "https://api.trello.com/1/cards/" + id 
 
@@ -143,6 +103,7 @@ def complete_item(id):
 
     print(response.text)
 
+# Remove an item
 def delete_item(id):
     url = "https://api.trello.com/1/cards/" + id 
 
