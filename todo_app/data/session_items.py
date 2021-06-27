@@ -2,6 +2,7 @@ from flask import session
 import requests, os
 from dotenv import load_dotenv
 from flask.helpers import url_for
+from todo_app import item
 
 load_dotenv()
 
@@ -24,7 +25,7 @@ def get_items():
     
     items = [ ]
     for i in x:
-        items.append({'id': i['id'], 'status': 'ToDo', 'title': i['name'] })
+        items.append(item.Item(i['id'], 'ToDo', i['name'] ))
 	
     return items
 
@@ -41,7 +42,7 @@ def get_completeitems():
     
     completeItems = [ ]
     for i in x:
-        completeItems.append({'id': i['id'], 'status': 'Complete', 'title': i['name'] })
+        completeItems.append(item.Item(i['id'], 'Complete', i['name'] ))
 	
     return completeItems
 
@@ -69,21 +70,6 @@ def add_item(title):
     )
 
     print(response.text)
-
-# Redundant?
-def save_item(item):
-    """
-    Updates an existing item in the session. If no existing item matches the ID of the specified item, nothing is saved.
-
-    Args:
-        item: The item to save.
-    """
-    existing_items = get_items()
-    updated_items = [item if item['id'] == existing_item['id'] else existing_item for existing_item in existing_items]
-
-    session['items'] = updated_items
-    
-    return item
 
 # Move an item from the todo to the complete list
 def complete_item(id):
