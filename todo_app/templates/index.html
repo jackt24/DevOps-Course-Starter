@@ -11,7 +11,7 @@
     <div class="col-md-12"> 
       <h2>ToDo Items</h2>
       <ul class="list-group mb-4">
-        {% for item in items %}
+        {% for item in view_model.items %}
           <form method="PUT" name="updateform" action="/complete/{{item.id}}">
             <li>
                 {{item.id}} - {{item.status}} - {{item.title}} 

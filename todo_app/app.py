@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect
 from todo_app.flask_config import Config
 from todo_app.data.session_items import *
 from todo_app import item
+from todo_app.viewmodel import ViewModel
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -11,7 +12,11 @@ app.config.from_object(Config)
 def index():
 	items = get_items()
 	complete_items = get_completeitems()
-	return render_template("index.html", items=items, complete_items=complete_items)
+
+	item_view_model = ViewModel(items)
+	
+	return render_template("index.html", view_model = item_view_model, complete_items=complete_items)
+	# return render_template("index.html", items=items, complete_items=complete_items)
 
 # Add an item to the to do list
 @app.route('/add', methods=['POST', 'GET'])
