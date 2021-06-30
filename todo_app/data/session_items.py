@@ -2,11 +2,11 @@ from flask import session
 import requests, os
 from dotenv import load_dotenv
 from flask.helpers import url_for
-from todo_app import item
+from todo_app.item import Item
 
 load_dotenv()
 
-SECRET_KEY = os.getenv('SECRET_KEY')
+TRELLO_KEY = os.getenv('TRELLO_KEY')
 TOKEN = os.getenv('TOKEN')
 BOARD = os.getenv('BOARD')
 LIST = os.getenv('LIST')
@@ -16,7 +16,7 @@ COMPLETELIST = os.getenv('COMPLETELIST')
 def get_items():
     url = "https://api.trello.com/1/lists/" + LIST + "/cards"
     query = {
-		'key': SECRET_KEY,
+		'key': TRELLO_KEY,
     	'token': TOKEN,
     	}
 	
@@ -25,7 +25,7 @@ def get_items():
     
     items = [ ]
     for i in x:
-        items.append(item.Item(i['id'], 'ToDo', i['name'] ))
+        items.append(Item(i['id'], 'ToDo', i['name'] ))
 	
     return items
 
@@ -33,7 +33,7 @@ def get_items():
 def get_completeitems():
     url = "https://api.trello.com/1/lists/" + COMPLETELIST + "/cards"
     query = {
-		'key': SECRET_KEY,
+		'key': TRELLO_KEY,
     	'token': TOKEN,
     	}
 	
@@ -42,14 +42,9 @@ def get_completeitems():
     
     completeItems = [ ]
     for i in x:
-        completeItems.append(item.Item(i['id'], 'Complete', i['name'] ))
+        completeItems.append(Item(i['id'], 'Complete', i['name'] ))
 	
     return completeItems
-
-# Gets an item from the list based on ID
-def get_item(id):
-    items = get_items()
-    return next((item for item in items if item['id'] == int(id)), None)
 
 # Adds a new item to the todo list with a specified title
 def add_item(title):
@@ -57,7 +52,7 @@ def add_item(title):
     url = "https://api.trello.com/1/cards"
 
     query = {
-        'key': SECRET_KEY,
+        'key': TRELLO_KEY,
         'token': TOKEN,
         'idList': LIST,
         'name': title
@@ -76,7 +71,7 @@ def complete_item(id):
     url = "https://api.trello.com/1/cards/" + id 
 
     query = {
-        'key': SECRET_KEY,
+        'key': TRELLO_KEY,
         'token': TOKEN,
         'idList': COMPLETELIST
     }
@@ -94,7 +89,7 @@ def delete_item(id):
     url = "https://api.trello.com/1/cards/" + id 
 
     query = {
-        'key': SECRET_KEY,
+        'key': TRELLO_KEY,
         'token': TOKEN,
         'closed': 'true'
     }

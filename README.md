@@ -34,7 +34,7 @@ The `.env` file is used by flask to set environment variables when running `flas
 
 You will need to setup a Trello account, create a ToDo and a Complete board and change the following keys in the .env file:
 
-SECRET_KEY = Key generated on the Trello site
+TRELLO_KEY = Key generated on the Trello site
 TOKEN = Token generated on the trello site
 BOARD = Id of the Board
 LIST = Id of the Todo list
