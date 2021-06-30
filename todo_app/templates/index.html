@@ -7,18 +7,33 @@
     <p class="lead">Just another to-do app.</p>
   </div>
 
-  <div class="row">
-    <div class="col-md-12">
-      <h2>Items</h2>
+  <div class="row" padding-bottom: 500px;> 
+    <div class="col-md-12"> 
+      <h2>ToDo Items</h2>
       <ul class="list-group mb-4">
-        {% for items in items %}
-          <li>{{items.id}} - {{items.status}} - {{items.title}}</li>
+        {% for item in items %}
+          <form method="PUT" name="updateform" action="/complete/{{item.id}}">
+            <li>
+                {{item.id}} - {{item.status}} - {{item.title}} 
+                <input type="submit" method="PUT"  action="/complete/{{item.id}}" name="Mark Complete" value="Mark Complete">
+            </li>
+          </form>
         {% endfor %}
       </ul>
+
+      <h2>Complete Items</h2>
+      <ul class="list-group mb-4">
+        {% for complete_item in complete_items %}
+            <li>
+                {{complete_item.id}} - {{complete_item.status}} - {{complete_item.title}} 
+            </li>
+        {% endfor %}
+      </ul>
+
       <h2>Add Item</h2>
-        <form method="POST" name="form">
+        <form method="POST" name="form" action='/add'>
             <input type="text" name='text' id='text'>
-            <input type="submit" name="New Item">
+            <input type="submit" action="/add" name="New Item" value="Add">
         </form>
     </div>
   </div>

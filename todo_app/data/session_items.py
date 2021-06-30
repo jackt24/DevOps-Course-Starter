@@ -1,69 +1,103 @@
 from flask import session
+import requests, os
+from dotenv import load_dotenv
+from flask.helpers import url_for
+from todo_app.item import Item
 
-_DEFAULT_ITEMS = [
-    { 'id': 1, 'status': 'Not Started', 'title': 'List saved todo items' },
-    { 'id': 2, 'status': 'Not Started', 'title': 'Allow new items to be added' }
-]
+load_dotenv()
 
+TRELLO_KEY = os.getenv('TRELLO_KEY')
+TOKEN = os.getenv('TOKEN')
+BOARD = os.getenv('BOARD')
+LIST = os.getenv('LIST')
+COMPLETELIST = os.getenv('COMPLETELIST')
 
+# Returns a list of todo items
 def get_items():
-    """
-    Fetches all saved items from the session.
+    url = "https://api.trello.com/1/lists/" + LIST + "/cards"
+    query = {
+		'key': TRELLO_KEY,
+    	'token': TOKEN,
+    	}
+	
+    response = requests.request('GET', url, params=query)
+    x=response.json()
+    
+    items = [ ]
+    for i in x:
+        items.append(Item(i['id'], 'ToDo', i['name'] ))
+	
+    return items
 
-    Returns:
-        list: The list of saved items.
-    """
-    return session.get('items', _DEFAULT_ITEMS.copy())
+# Returns a list of completed items
+def get_completeitems():
+    url = "https://api.trello.com/1/lists/" + COMPLETELIST + "/cards"
+    query = {
+		'key': TRELLO_KEY,
+    	'token': TOKEN,
+    	}
+	
+    response = requests.request('GET', url, params=query)
+    x=response.json()
+    
+    completeItems = [ ]
+    for i in x:
+        completeItems.append(Item(i['id'], 'Complete', i['name'] ))
+	
+    return completeItems
 
-
-def get_item(id):
-    """
-    Fetches the saved item with the specified ID.
-
-    Args:
-        id: The ID of the item.
-
-    Returns:
-        item: The saved item, or None if no items match the specified ID.
-    """
-    items = get_items()
-    return next((item for item in items if item['id'] == int(id)), None)
-
-
+# Adds a new item to the todo list with a specified title
 def add_item(title):
-    """
-    Adds a new item with the specified title to the session.
 
-    Args:
-        title: The title of the item.
+    url = "https://api.trello.com/1/cards"
 
-    Returns:
-        item: The saved item.
-    """
-    items = get_items()
+    query = {
+        'key': TRELLO_KEY,
+        'token': TOKEN,
+        'idList': LIST,
+        'name': title
+    }
 
-    # Determine the ID for the item based on that of the previously added item
-    id = items[-1]['id'] + 1 if items else 0
+    response = requests.request(
+        'POST',
+        url,
+        params=query
+    )
 
-    item = { 'id': id, 'title': title, 'status': 'Not Started' }
+    print(response.text)
 
-    # Add the item to the list
-    items.append(item)
-    session['items'] = items
+# Move an item from the todo to the complete list
+def complete_item(id):
+    url = "https://api.trello.com/1/cards/" + id 
 
-    return item
+    query = {
+        'key': TRELLO_KEY,
+        'token': TOKEN,
+        'idList': COMPLETELIST
+    }
 
+    headers = {
+        "Accept": "application/json"
+    }
 
-def save_item(item):
-    """
-    Updates an existing item in the session. If no existing item matches the ID of the specified item, nothing is saved.
+    response = requests.request('PUT', url, headers=headers, params=query)
 
-    Args:
-        item: The item to save.
-    """
-    existing_items = get_items()
-    updated_items = [item if item['id'] == existing_item['id'] else existing_item for existing_item in existing_items]
+    print(response.text)
 
-    session['items'] = updated_items
+# Remove an item
+def delete_item(id):
+    url = "https://api.trello.com/1/cards/" + id 
 
-    return item
+    query = {
+        'key': TRELLO_KEY,
+        'token': TOKEN,
+        'closed': 'true'
+    }
+
+    headers = {
+        "Accept": "application/json"
+    }
+
+    response = requests.request('PUT', url, headers=headers, params=query)
+
+    print(response.text)
