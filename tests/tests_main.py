@@ -1,43 +1,24 @@
+from todo_app import viewmodel
 from todo_app.viewmodel import ViewModel
 from todo_app.data import session_items
+from todo_app.item import Item
 
-# def test_viewmodel():
 
-    #  # Arrange
-    # items_in_doing = [{'id': '60aae7e68ae1e01db6226b86', 'status': 'Not Started', 'title': 'Learn JSON'},
-    #                   {'id': '60cdfc1746d7211010266ff7', 'status': 'Not Started', 'title': 'Learn XML'}]
+def test_ToDoItems():
+    items = [
+        Item('Task 1', "ToDo",'hello'),
+        Item('Task 2', "Complete", 'hello'),
+        Item('Task 3', "Doing", 'hello')
+    ]
+
+    view_model = ViewModel(items)
+
+    assert len(view_model.to_do_items) == 1
     
-    # # Act
-    # items = session_items.get_items()
-    
-    # # Assert
-    # print(" ")
-    # print(" ")
-    # print ('items_in_doing:')
-    # print(items_in_doing)
-    
-    # print(" ")
-    # print ('items:')
-    # print(items)
-    
-    # assert items_in_doing == items
-    
-    # item = ['Test ID', 'ToDo', 'A test description']
-    # testView = ViewModel(item)
 
-    # print(str.testView)
-    
-    # pass
+# def test_upper():
+#     assert 'foo'.upper() == 'FOO'
 
-
-
-
-
-# import pytest
-
-def test_upper():
-    assert 'foo'.upper() == 'FOO'
-
-def test_isupper():
-    assert 'FOO'.isupper()
-    assert not 'Foo'.isupper()
+# def test_isupper():
+#     assert 'FOO'.isupper()
+#     assert not 'Foo'.isupper()
