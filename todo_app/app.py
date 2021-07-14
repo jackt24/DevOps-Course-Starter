@@ -1,16 +1,20 @@
 from flask import Flask, render_template, request, redirect
 from todo_app.flask_config import Config
 from todo_app.data.session_items import *
+from todo_app.viewmodel import ViewModel
 
 app = Flask(__name__)
 app.config.from_object(Config)
 
-# Retrieves items from Trello and renders the to do and complete lists 
-@app.route('/')
+# Populate lists and add items 
+@app.route('/',methods=['POST', 'GET'])
 def index():
 	items = get_items()
 	complete_items = get_completeitems()
-	return render_template("index.html", items=items, complete_items=complete_items)
+
+	item_view_model = ViewModel(items)
+	
+	return render_template("index.html", view_model = item_view_model, complete_items=complete_items)
 
 # Add an item to the to do list
 @app.route('/add', methods=['POST', 'GET'])
