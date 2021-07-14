@@ -64,7 +64,7 @@ def add_item(title):
         params=query
     )
 
-    print(response.text)
+    # print(response.text)
 
 # Move an item from the todo to the complete list
 def complete_item(id):
@@ -82,7 +82,7 @@ def complete_item(id):
 
     response = requests.request('PUT', url, headers=headers, params=query)
 
-    print(response.text)
+    # print(response.text)
 
 # Remove an item
 def delete_item(id):
@@ -100,4 +100,4 @@ def delete_item(id):
 
     response = requests.request('PUT', url, headers=headers, params=query)
 
-    print(response.text)
+    # print(response.text)
