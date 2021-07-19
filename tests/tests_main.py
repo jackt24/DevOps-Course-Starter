@@ -14,11 +14,26 @@ def test_ToDoItems():
     view_model = ViewModel(items)
 
     assert len(view_model.to_do_items) == 1
+
+def test_CompletedItems():
+    items = [
+        Item('Task 1', "ToDo",'hello'),
+        Item('Task 2', "Complete", 'hello'),
+        Item('Task 3', "Doing", 'hello')
+    ]
     
+    view_model = ViewModel(items)
 
-# def test_upper():
-#     assert 'foo'.upper() == 'FOO'
+    assert len(view_model.complete_items) == 1
 
-# def test_isupper():
-#     assert 'FOO'.isupper()
-#     assert not 'Foo'.isupper()
+def test_DoingItems():
+    items = [
+        Item('Task 1', "ToDo",'hello'),
+        Item('Task 2', "Complete", 'hello'),
+        Item('Task 3', "Doing", 'hello')
+    ]
+    
+    view_model = ViewModel(items)
+
+    assert len(view_model.doing_items) == 1
+
