@@ -10,7 +10,7 @@ from todo_app.app import create_app
 
 @pytest.fixture(scope="module")
 def driver():
-    with webdriver.Chrome() as driver:
+    with webdriver.Firefox() as driver:
         yield driver
 
 def create_trello_board():
