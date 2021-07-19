@@ -3,6 +3,8 @@ import requests, os
 from dotenv import load_dotenv
 from flask.helpers import url_for
 from todo_app.item import Item
+from todo_app.flask_config import Config
+from flask import current_app as app
 
 load_dotenv()
 

@@ -1,9 +1,7 @@
 from unittest import mock
 from todo_app.data.session_items import BOARD
 from unittest.mock import patch, Mock
-from flask import app
 import pytest
-import requests, os
 from dotenv import load_dotenv, find_dotenv
 
 from todo_app.app import create_app
@@ -26,6 +24,10 @@ def test_index_page(mock_get_requests, client):
 
     response = client.get('/')
 
+    response_html = response.data.decode()
+    print(response_html)
+    assert 'ToDo Items' in response_html
+
 def mock_get_lists(url, params):
     if url == f'https://api.trello.com/1/boards/{BOARD}/lists':
         response = mock()
@@ -35,5 +37,3 @@ def mock_get_lists(url, params):
     response.json.return_value = response_html
     return response
     return None
-
-    
