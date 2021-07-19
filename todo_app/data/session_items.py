@@ -46,8 +46,6 @@ def get_completeitems():
 	
     return completeItems
 
-
-
 # Adds a new item to the todo list with a specified title
 def add_item(title):
 
