@@ -12,7 +12,29 @@ Vagrant.configure("2") do |config|
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://vagrantcloud.com/search.
-  config.vm.box = "base"
+  config.vm.box = "hashicorp/bionic64"
+  config.vm.provision "shell", privileged: false, inline: <<-SHELL
+    sudo apt-get update
+    sudo apt-get install -y make build-essential libssl-dev zlib1g-dev libbz2-dev \
+    libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev \
+    xz-utils tk-dev libffi-dev liblzma-dev python-openssl git
+    # apt-get install libedit-dev
+    # apt-get install lvaibncurses5-de
+    apt-get git clone https://github.com/pyenv/pyenv.git ~/.pyenv
+    apt-get cd ~/.pyenv && src/configure && make -C src
+
+    echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.profile
+    echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.profile
+    echo 'eval "$(pyenv init --path)"' >> ~/.profile§
+
+    pyenv install 2.7.16
+    python install pip 
+    # git clone https://github.com/pyenv/pyenv.git ~/.pyenv
+    # cd ~/.pyenv && src/configure && make -C src
+
+    # TODO: Install pyenv prerequisites
+    # TODO: Install pyenv 
+  SHELL
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
