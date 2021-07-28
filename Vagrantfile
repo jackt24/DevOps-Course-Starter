@@ -30,6 +30,6 @@ Vagrant.configure("2") do |config|
 
     cd /vagrant
     poetry install
-    poetry flask run -h 0.0.0.0
+    poetry run flask run -h 0.0.0.0
   SHELL
 end
