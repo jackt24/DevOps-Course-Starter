@@ -20,8 +20,6 @@ def driver():
 #
 def create_trello_board():
     config = Config()
-    
-    print(str(config.COMPLETELIST))
     response = requests.post(
         url=f'{config.TRELLO_BASE_URL}/boards',
         params={
