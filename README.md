@@ -58,3 +58,15 @@ You should see output similar to the following:
  * Debugger PIN: 226-556-590
 ```
 Now visit [`http://localhost:5000/`](http://localhost:5000/) in your web browser to view the app.
+
+## Testing
+
+All tests are found within the tests folder in the root. You can run these with the command 
+```bash
+$ pytest
+```
+
+To run a specific test, use the following command 
+```bash
+$ pytest -k 'your_test_name_here'
+```

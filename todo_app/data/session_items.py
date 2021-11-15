@@ -3,6 +3,8 @@ import requests, os
 from dotenv import load_dotenv
 from flask.helpers import url_for
 from todo_app.item import Item
+from todo_app.flask_config import Config
+from flask import current_app as app
 
 load_dotenv()
 
@@ -64,7 +66,7 @@ def add_item(title):
         params=query
     )
 
-    print(response.text)
+    # print(response.text)
 
 # Move an item from the todo to the complete list
 def complete_item(id):
@@ -82,7 +84,7 @@ def complete_item(id):
 
     response = requests.request('PUT', url, headers=headers, params=query)
 
-    print(response.text)
+    # print(response.text)
 
 # Remove an item
 def delete_item(id):
@@ -100,4 +102,4 @@ def delete_item(id):
 
     response = requests.request('PUT', url, headers=headers, params=query)
 
-    print(response.text)
+    # print(response.text)
