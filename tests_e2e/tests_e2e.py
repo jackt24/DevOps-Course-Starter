@@ -8,6 +8,8 @@ import requests
 from todo_app.flask_config import Config
 from todo_app.app import create_app
 
+
+
 @pytest.fixture(scope="module")
 def driver():
     with webdriver.Firefox() as driver:
@@ -38,6 +40,8 @@ def delete_trello_board(board_id):
 
 @pytest.fixture(scope='module')
 def app_with_temp_board():
+    # Load variables?
+    
     # Create the new board & update the board id environment variable
     board_id = create_trello_board()
     os.environ['BOARD'] = board_id

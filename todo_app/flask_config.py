@@ -9,9 +9,4 @@ class Config:
             self.TOKEN = os.environ.get('TOKEN')
             self.BOARD = os.environ.get('BOARD')
             self.LIST = os.environ.get('LIST')
-            self.BOARD = os.environ.get('COMPLETELIST')
-
-    # """Base configuration variables."""
-    # TRELLO_KEY = os.environ.get('TRELLO_KEY')
-    # if not TRELLO_KEY:
-    #     raise ValueError("No TRELLO_KEY set for Flask application. Did you follow the setup instructions?")
+            self.COMPLETELIST = os.environ.get('COMPLETELIST')
