@@ -5,7 +5,8 @@ from todo_app.viewmodel import ViewModel
 
 def create_app():
 	app = Flask(__name__)
-	# app.config.from_object(Config)
+	app.config.from_object(Config())
+
 
 	# Populate lists and add items 
 	@app.route('/',methods=['POST', 'GET'])

@@ -6,20 +6,13 @@ from todo_app.item import Item
 from todo_app.flask_config import Config
 from flask import current_app as app
 
-load_dotenv()
-
-TRELLO_KEY = os.getenv('TRELLO_KEY')
-TOKEN = os.getenv('TOKEN')
-BOARD = os.getenv('BOARD')
-LIST = os.getenv('LIST')
-COMPLETELIST = os.getenv('COMPLETELIST')
 
 # Returns a list of todo items
 def get_items():
-    url = "https://api.trello.com/1/lists/" + LIST + "/cards"
+    url = "https://api.trello.com/1/lists/" + app.config['LIST']+ "/cards"
     query = {
-		'key': TRELLO_KEY,
-    	'token': TOKEN,
+		'key': app.config['TRELLO_KEY'],
+        'token': app.config['TOKEN'],
     	}
 	
     response = requests.request('GET', url, params=query)
@@ -33,11 +26,11 @@ def get_items():
 
 # Returns a list of completed items
 def get_completeitems():
-    url = "https://api.trello.com/1/lists/" + COMPLETELIST + "/cards"
+    url = "https://api.trello.com/1/lists/" + app.config['COMPLETELIST'] + "/cards"
     query = {
-		'key': TRELLO_KEY,
-    	'token': TOKEN,
-    	}
+	    'key': app.config['TRELLO_KEY'],
+        'token': app.config['TOKEN'],
+        }
 	
     response = requests.request('GET', url, params=query)
     x=response.json()
@@ -54,9 +47,9 @@ def add_item(title):
     url = "https://api.trello.com/1/cards"
 
     query = {
-        'key': TRELLO_KEY,
-        'token': TOKEN,
-        'idList': LIST,
+        'key': app.config['TRELLO_KEY'],
+        'token': app.config['TOKEN'],
+        'idList': app.config['LIST'],
         'name': title
     }
 
@@ -73,9 +66,9 @@ def complete_item(id):
     url = "https://api.trello.com/1/cards/" + id 
 
     query = {
-        'key': TRELLO_KEY,
-        'token': TOKEN,
-        'idList': COMPLETELIST
+        'key': app.config['TRELLO_KEY'],
+        'token': app.config['TOKEN'],
+        'idList': app.config['COMPLETELIST']
     }
 
     headers = {
@@ -91,8 +84,8 @@ def delete_item(id):
     url = "https://api.trello.com/1/cards/" + id 
 
     query = {
-        'key': TRELLO_KEY,
-        'token': TOKEN,
+        'key': app.config['TRELLO_KEY'],
+        'token': app.config['TOKEN'],
         'closed': 'true'
     }
 
