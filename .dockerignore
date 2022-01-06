@@ -1,0 +1,11 @@
+.git
+.cache
+__pycache__/
+.pytest_cache/
+*.md
+.DS_Store
+.vscode/
+.env
+env/
+.venv
+.vagrant
