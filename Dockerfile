@@ -40,6 +40,8 @@ RUN apt-get update && \
     apt-get install unzip -y &&\
     unzip ./chromedriver_linux64.zip
 COPY entrypoint-test.sh ./
+COPY ./tests/ ./tests/
+COPY ./tests_e2e/ ./tests_e2e/
 COPY ./todo_app/ ./todo_app/
 EXPOSE 5000
 RUN chmod +x ./entrypoint-test.sh
