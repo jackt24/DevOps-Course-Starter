@@ -1,2 +1,4 @@
+os: linux 
+language: bash
 script:
 - echo "hello world"
