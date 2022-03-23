@@ -1,3 +1,4 @@
+# setup
 FROM python:3.9.9-buster as base-image
 
 WORKDIR /project
@@ -7,6 +8,7 @@ COPY poetry.lock pyproject.toml ./
 RUN poetry config virtualenvs.create false --local && poetry install
 RUN pip install gunicorn
 
+# production build stage
 FROM base-image as todo-prod
 COPY entrypoint-prod.sh gunicorn_config.py ./
 COPY ./todo_app ./todo_app
@@ -15,8 +17,14 @@ ENV PORT=5000
 RUN chmod +x ./entrypoint-prod.sh 
 ENTRYPOINT ["sh", "entrypoint-prod.sh"]
 
+#ocal development stage 
 FROM base-image as todo-dev
 ENV FLASK_APP=app.py
 COPY entrypoint-dev.sh ./
 EXPOSE 5000
 ENTRYPOINT ["sh", "entrypoint-dev.sh"]
+
+# testing stage 
+FROM base-image as test
+
+ENTRYPOINT [ "poetry", "run", "pytest" ]
