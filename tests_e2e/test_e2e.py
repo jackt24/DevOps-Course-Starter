@@ -45,7 +45,10 @@ def delete_trello_board(board_id):
 @pytest.fixture(scope='module')
 def app_with_temp_board():
     # Load variables?
-    load_dotenv(override=True)
+    try:
+        load_dotenv(override=True)
+    except:
+        pass
 
     # Create the new board & update the board id environment variable
     board_id = create_trello_board()
