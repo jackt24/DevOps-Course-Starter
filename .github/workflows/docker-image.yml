@@ -15,4 +15,13 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+      run: docker build --target test --tag my-test-image .
+      run: docker run my-test-image tests   
+      run: docker run my-test-image tests_e2e
+
+
+
+
+
+
+
