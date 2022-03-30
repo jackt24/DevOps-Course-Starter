@@ -2,9 +2,10 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ exercise7.1 ]
+    paths-ignore: [ 'README.md']
   pull_request:
-    branches: [ exercise7.1 ]
+    branches: [ main ]
+    paths-ignore: [ 'README.md']
 
 jobs:
 
