@@ -17,7 +17,7 @@ jobs:
     - name: Build the Docker image
       run: docker build --target test --tag my-test-image .
     - run: docker run --env-file .env.test my-test-image tests   
-    - run: docker run my-test-image tests_e2e
+    - run: docker run -e TRELLO_KEY=${{ secrets.TRELLO_KEY }} -e TOKEN=${{ secrets.TOKEN }} my-test-image tests_e2e
 
 
 
