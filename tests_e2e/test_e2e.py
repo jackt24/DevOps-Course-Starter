@@ -13,7 +13,7 @@ from todo_app.app import create_app
 
 @pytest.fixture(scope="module")
 def driver():
-    with webdriver.Chrome("./chromedriver") as driver:
+    with webdriver.Chrome() as driver:
         yield driver
 
 # Id organisation board on trello - create default id
