@@ -13,7 +13,12 @@ from todo_app.app import create_app
 
 @pytest.fixture(scope="module")
 def driver():
-    with webdriver.Chrome("./chromedriver") as driver:
+    opts = webdriver.ChromeOptions()
+    opts.add_argument('--headless')
+    opts.add_argument('--no-sandbox')
+    opts.add_argument('--disable-dev-shm-usage')
+    
+    with webdriver.Chrome(options=opts) as driver:
         yield driver
 
 # Id organisation board on trello - create default id

@@ -2,9 +2,10 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ main ]
+    paths-ignore: [ 'README.md']
   pull_request:
     branches: [ main ]
+    paths-ignore: [ 'README.md']
 
 jobs:
 
@@ -15,4 +16,13 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+      run: docker build --target test --tag my-test-image .
+    - run: docker run --env-file .env.test my-test-image tests   
+    - run: docker run -e TRELLO_KEY=${{ secrets.TRELLO_KEY }} -e TOKEN=${{ secrets.TOKEN }} my-test-image tests_e2e
+
+
+
+
+
+
+
