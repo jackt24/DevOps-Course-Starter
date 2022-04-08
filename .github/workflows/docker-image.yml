@@ -8,17 +8,38 @@ on:
     paths-ignore: [ 'README.md']
 
 jobs:
+  job-one:
+    name: job-one
+    ID: 1
+    build:
 
-  build:
+      runs-on: ubuntu-latest
 
-    runs-on: ubuntu-latest
+      steps:
+      - uses: actions/checkout@v3
+      - name: Build the Docker image
+        run: docker build --target test --tag my-test-image .
+      - run: docker run --env-file .env.test my-test-image tests   
+      - run: docker run -e TRELLO_KEY=${{ secrets.TRELLO_KEY }} -e TOKEN=${{ secrets.TOKEN }} my-test-image tests_e2e
 
-    steps:
-    - uses: actions/checkout@v3
-    - name: Build the Docker image
-      run: docker build --target test --tag my-test-image .
-    - run: docker run --env-file .env.test my-test-image tests   
-    - run: docker run -e TRELLO_KEY=${{ secrets.TRELLO_KEY }} -e TOKEN=${{ secrets.TOKEN }} my-test-image tests_e2e
+  job-two:
+    name: job-two
+    run: echo "Publishing!"
+    needs: 1
+    # dont really get the below 
+    if: github.event_name 
+    if: github.ref
+
+    build: 
+      steps:
+      - run: docker login -u jackt24 -p ${( secrets.DOCKER_PASSWORD )}
+      - run: docker build --target test --tag jackt24/my-test-image:latest . 
+      - run: docker push jackt24/my-test-image:latest
+      - run: heroku login
+      - run: heroku container:login
+      - run: docker tag latest/my-test-image registry.heroku.com/dev-ops-course/web
+      - run: docker push registry.heroku.com/dev-ops-course/web
+      - run: heroku container:release
 
 
 
