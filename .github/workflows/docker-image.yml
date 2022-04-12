@@ -33,7 +33,7 @@ jobs:
       - run: docker build --target todo-prod --tag jackt24/todo-prod:latest . 
       - run: docker push jackt24/todo-prod:latest
       - run: heroku container:login
-      - run: docker tag latest registry.heroku.com/dev-ops-course/web
+      - run: docker tag jackt24/latest registry.heroku.com/dev-ops-course/web
       - run: docker push registry.heroku.com/dev-ops-course/web
       - run: heroku container:release -a dev-ops-course
 
