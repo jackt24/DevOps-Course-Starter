@@ -20,7 +20,6 @@ jobs:
 
   job-two:
     name: job-two
-    run: echo "Publishing!"
     needs: job-one
     if: github.event_name == "push" && github.ref_name == "main"
     env: 
