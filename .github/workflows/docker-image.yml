@@ -34,7 +34,7 @@ jobs:
       - run: docker push jackt24/todo-prod:latest
       - run: heroku container:login
       - run: docker tag jackt24/todo-prod:latest registry.heroku.com/dev-ops-course/web
-      - run: heroku container:push registry.heroku.com/dev-ops-course/web
+      - run: heroku container:push registry.heroku.com/dev-ops-course/web -a dev-ops-course
       - run: heroku container:release -a dev-ops-course
 
 
