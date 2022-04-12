@@ -11,11 +11,8 @@ jobs:
   job-one:
     name: job-one
     ID: 1
-    build:
-
-      runs-on: ubuntu-latest
-
-      steps:
+    runs-on: ubuntu-latest
+    steps:
       - uses: actions/checkout@v3
       - name: Build the Docker image
         run: docker build --target test --tag my-test-image .
@@ -29,16 +26,14 @@ jobs:
     if: github.event_name == "push" && github.ref_name == "main"
     env: 
       HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-
-    build: 
-      steps:
-      - run: docker login -u jackt24 -p ${( secrets.DOCKER_PASSWORD )}
-      - run: docker build --target todo-prod --tag jackt24/todo-prod:latest . 
-      - run: docker push jackt24/todo-prod:latest
-      - run: heroku container:login
-      - run: docker tag latest/todo-prod registry.heroku.com/dev-ops-course/web
-      - run: docker push registry.heroku.com/dev-ops-course/web
-      - run: heroku container:release -a dev-ops-course
+    steps:
+    - run: docker login -u jackt24 -p ${( secrets.DOCKER_PASSWORD )}
+    - run: docker build --target todo-prod --tag jackt24/todo-prod:latest . 
+    - run: docker push jackt24/todo-prod:latest
+    - run: heroku container:login
+    - run: docker tag latest/todo-prod registry.heroku.com/dev-ops-course/web
+    - run: docker push registry.heroku.com/dev-ops-course/web
+    - run: heroku container:release -a dev-ops-course
 
 
 

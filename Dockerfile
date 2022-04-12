@@ -6,7 +6,6 @@ RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-
 ENV PATH = "${PATH}:/root/.poetry/bin"
 COPY poetry.lock pyproject.toml ./
 RUN poetry config virtualenvs.create false --local && poetry install
-RUN pip install gunicorn
 
 # production build stage
 FROM base-image as todo-prod
