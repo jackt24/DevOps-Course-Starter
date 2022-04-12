@@ -25,21 +25,20 @@ jobs:
   job-two:
     name: job-two
     run: echo "Publishing!"
-    needs: 1
-    # dont really get the below 
-    if: github.event_name 
-    if: github.ref
+    needs: job-one
+    if: github.event_name == "push" && github.ref_name == "main"
+    env: 
+      HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
 
     build: 
       steps:
       - run: docker login -u jackt24 -p ${( secrets.DOCKER_PASSWORD )}
-      - run: docker build --target test --tag jackt24/my-test-image:latest . 
-      - run: docker push jackt24/my-test-image:latest
-      - run: heroku login
+      - run: docker build --target todo-prod --tag jackt24/todo-prod:latest . 
+      - run: docker push jackt24/todo-prod:latest
       - run: heroku container:login
-      - run: docker tag latest/my-test-image registry.heroku.com/dev-ops-course/web
+      - run: docker tag latest/todo-prod registry.heroku.com/dev-ops-course/web
       - run: docker push registry.heroku.com/dev-ops-course/web
-      - run: heroku container:release
+      - run: heroku container:release -a dev-ops-course
 
 
 
