@@ -28,13 +28,14 @@ jobs:
     env: 
       HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
     steps:
-    - run: docker login -u jackt24 -p ${{ secrets.DOCKER_PASSWORD }}
-    - run: docker build --target todo-prod --tag jackt24/todo-prod:latest . 
-    - run: docker push jackt24/todo-prod:latest
-    - run: heroku container:login
-    - run: docker tag latest/todo-prod registry.heroku.com/dev-ops-course/web
-    - run: docker push registry.heroku.com/dev-ops-course/web
-    - run: heroku container:release -a dev-ops-course
+      - uses: actions/checkout@v3
+      - run: docker login -u jackt24 -p ${{ secrets.DOCKER_PASSWORD }}
+      - run: docker build --target todo-prod --tag jackt24/todo-prod:latest . 
+      - run: docker push jackt24/todo-prod:latest
+      - run: heroku container:login
+      - run: docker tag latest/todo-prod registry.heroku.com/dev-ops-course/web
+      - run: docker push registry.heroku.com/dev-ops-course/web
+      - run: heroku container:release -a dev-ops-course
 
 
 
