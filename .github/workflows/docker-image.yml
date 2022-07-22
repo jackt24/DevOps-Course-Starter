@@ -1,5 +1,4 @@
 name: Docker Image CI
-
 on:
   push:
     paths-ignore: [ 'README.md']
@@ -8,21 +7,31 @@ on:
     paths-ignore: [ 'README.md']
 
 jobs:
-
-  build:
-
+  job-one:
+    name: job-one
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v3
-    - name: Build the Docker image
-      run: docker build --target test --tag my-test-image .
-    - run: docker run --env-file .env.test my-test-image tests   
-    - run: docker run -e TRELLO_KEY=${{ secrets.TRELLO_KEY }} -e TOKEN=${{ secrets.TOKEN }} my-test-image tests_e2e
+      - uses: actions/checkout@v3
+      - name: Build the Docker image
+        run: docker build --target test --tag my-test-image .
+      - run: docker run --env-file .env.test my-test-image tests   
+      - run: docker run -e TRELLO_KEY=${{ secrets.TRELLO_KEY }} -e TOKEN=${{ secrets.TOKEN }} my-test-image tests_e2e
 
-
-
-
-
-
-
+  job-two:
+    name: job-two
+    runs-on: ubuntu-latest
+    needs: job-one
+    if: github.event_name == 'push' && github.ref_name == 'main'
+    
+    env: 
+      HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+      
+    steps:
+      - uses: actions/checkout@v3
+      - run: docker login -u jackt24 -p ${{ secrets.DOCKER_PASSWORD }}
+      - run: docker build --target todo-prod --tag jackt24/todo-prod:latest . 
+      - run: docker push jackt24/todo-prod:latest
+      - run: heroku container:login
+      - run: docker tag jackt24/todo-prod:latest registry.heroku.com/dev-ops-course/web
+      - run: heroku container:push registry.heroku.com/dev-ops-course/web -a dev-ops-course
+      - run: heroku container:release web -a dev-ops-course

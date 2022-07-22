@@ -36,6 +36,21 @@ def create_trello_board():
     print (response.text)
     return response.json()['id']
 
+def set_list_ids():
+    config = Config()
+    response = requests.get(
+        url=f'{config.TRELLO_BASE_URL}/boards/{config.BOARD}/lists',
+        params={
+            'key': config.TRELLO_KEY,
+            'token': config.TOKEN,
+        }
+    )
+    lists = response.json()
+    os.environ['LIST'] = lists[0]["id"]
+    os.environ['COMPLETELIST'] = lists[2]["id"]
+
+
+
 
 def delete_trello_board(board_id):
     config = Config()
@@ -58,6 +73,8 @@ def app_with_temp_board():
     # Create the new board & update the board id environment variable
     board_id = create_trello_board()
     os.environ['BOARD'] = board_id
+    
+    set_list_ids()
  
     # construct the new application
     application = create_app()
