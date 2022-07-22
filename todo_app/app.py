@@ -4,11 +4,6 @@ from todo_app.data.session_items import *
 from todo_app.viewmodel import ViewModel
 import pymongo
 
-# cto add 
-
-client = pymongo.MongoClient("mongodb+srv://user:amex@cluster0.hkaoc.mongodb.net/db1?w=majority")
-db = client.test
-
 def create_app():
 	app = Flask(__name__)
 	app.config.from_object(Config())
