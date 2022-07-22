@@ -1,5 +1,6 @@
+from bson import ObjectId
 from flask import session
-import requests, os
+import requests, os, pymongo
 from dotenv import load_dotenv
 from flask.helpers import url_for
 from todo_app.item import Item
@@ -9,90 +10,75 @@ from flask import current_app as app
 
 # Returns a list of todo items
 def get_items():
-    url = "https://api.trello.com/1/lists/" + app.config['LIST']+ "/cards"
-    query = {
-		'key': app.config['TRELLO_KEY'],
-        'token': app.config['TOKEN'],
-    	}
-	
-    response = requests.request('GET', url, params=query)
-    x=response.json()
-    
-    items = [ ]
-    for i in x:
-        items.append(Item(i['id'], 'ToDo', i['name'] ))
-	
-    return items
+    todo_items = []
+    mongo_url = app.config['MONGO_URL']
+    mongo_db = app.config['MONGO_DB']
 
-# Returns a list of completed items
+    client = pymongo.MongoClient(mongo_url)
+    db = client[mongo_db]
+    items = db.items
+    todo_items = items.find({"status": "ToDo"})
+
+    return todo_items
+
+# Returns a list of complete items 
 def get_completeitems():
-    url = "https://api.trello.com/1/lists/" + app.config['COMPLETELIST'] + "/cards"
-    query = {
-	    'key': app.config['TRELLO_KEY'],
-        'token': app.config['TOKEN'],
-        }
-	
-    response = requests.request('GET', url, params=query)
-    x=response.json()
-    
-    completeItems = [ ]
-    for i in x:
-        completeItems.append(Item(i['id'], 'Complete', i['name'] ))
-	
-    return completeItems
+
+    complete_items = []
+    mongo_url = app.config['MONGO_URL']
+    mongo_db = app.config['MONGO_DB']
+
+    client = pymongo.MongoClient(mongo_url)
+    db = client[mongo_db]
+    items = db.items
+    complete_items = items.find({"status": "Complete"})
+
+    return complete_items
 
 # Adds a new item to the todo list with a specified title
 def add_item(title):
 
-    url = "https://api.trello.com/1/cards"
-
-    query = {
-        'key': app.config['TRELLO_KEY'],
-        'token': app.config['TOKEN'],
-        'idList': app.config['LIST'],
-        'name': title
+    newitem = {
+        "status":"ToDo",
+        "title": title
     }
 
-    response = requests.request(
-        'POST',
-        url,
-        params=query
-    )
+    mongo_url = app.config['MONGO_URL']
+    mongo_db = app.config['MONGO_DB']
 
-    # print(response.text)
+    client = pymongo.MongoClient(mongo_url)
+    db = client[mongo_db]
+    items = db.items
+    items.insert_one(newitem).inserted_id
 
 # Move an item from the todo to the complete list
 def complete_item(id):
-    url = "https://api.trello.com/1/cards/" + id 
 
-    query = {
-        'key': app.config['TRELLO_KEY'],
-        'token': app.config['TOKEN'],
-        'idList': app.config['COMPLETELIST']
+    update = {
+        'Status': "Complete"
     }
 
-    headers = {
-        "Accept": "application/json"
-    }
+    mongo_url = app.config['MONGO_URL']
+    mongo_db = app.config['MONGO_DB']
 
-    response = requests.request('PUT', url, headers=headers, params=query)
+    client = pymongo.MongoClient(mongo_url)
+    db = client[mongo_db]
+    items = db.items
 
-    # print(response.text)
+    search = {"_id": ObjectId(id)}
+
+    items.update_one(search, update)
 
 # Remove an item
 def delete_item(id):
-    url = "https://api.trello.com/1/cards/" + id 
 
-    query = {
-        'key': app.config['TRELLO_KEY'],
-        'token': app.config['TOKEN'],
-        'closed': 'true'
-    }
+    mongo_url = app.config['MONGO_URL']
+    mongo_db = app.config['MONGO_DB']
 
-    headers = {
-        "Accept": "application/json"
-    }
+    client = pymongo.MongoClient(mongo_url)
+    db = client[mongo_db]
+    items = db.items
 
-    response = requests.request('PUT', url, headers=headers, params=query)
+    search = {"_id": ObjectId(id)}
 
-    # print(response.text)
+    items.delete_one(search)
