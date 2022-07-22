@@ -2,6 +2,12 @@ from flask import Flask, render_template, request, redirect
 from todo_app.flask_config import Config
 from todo_app.data.session_items import *
 from todo_app.viewmodel import ViewModel
+import pymongo
+
+# client = pymongo.MongoClient("mongodb+srv://jackt24:amex@cluster0.hkaoc.mongodb.net/?retryWrites=true&w=majority")
+
+client = pymongo.MongoClient("mongodb+srv://user:amex@cluster0.hkaoc.mongodb.net/db1?w=majority")
+db = client.test
 
 def create_app():
 	app = Flask(__name__)

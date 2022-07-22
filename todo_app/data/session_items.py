@@ -8,6 +8,10 @@ from flask import current_app as app
 
 
 # Returns a list of todo items
+# So I imagine this is where the mongo stuff needs to come in...
+# def get_items2():
+    
+
 def get_items():
     url = "https://api.trello.com/1/lists/" + app.config['LIST']+ "/cards"
     query = {
