@@ -2,7 +2,6 @@ from flask import Flask, render_template, request, redirect
 from todo_app.flask_config import Config
 from todo_app.data.session_items import *
 from todo_app.viewmodel import ViewModel
-import pymongo
 
 def create_app():
 	app = Flask(__name__)
